@@ -1,0 +1,13 @@
+USER_FILE="file2.txt"
+# Đọc từng dòng trong file
+while IFS=: read -r username password; do
+    # Kiểm tra xem user đã tồn tại hay chưa
+    if id "$username" &>/dev/null; then
+        echo "User '$username' đã tồn tại."
+    else
+        # Tạo user mới
+        sudo useradd -m "$username"
+        echo "$username:$password" | sudo chpasswd
+        echo "User '$username' đã được tạo."
+    fi
+done < "$USER_FILE"
